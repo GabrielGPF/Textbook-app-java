@@ -2,6 +2,7 @@ package com.gjjg.textbook_app_java;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signinButtonClick(View view) {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 
     public void signupButtonClick(View view) {
