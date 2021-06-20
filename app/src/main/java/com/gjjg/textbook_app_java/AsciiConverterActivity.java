@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-public class AsciiConverter extends AppCompatActivity {
+public class AsciiConverterActivity extends AppCompatActivity {
 
     private TextView asciiTextView;
     private Button postButton, style1Button, style2Button, style3Button, style4Button;
@@ -47,8 +47,8 @@ public class AsciiConverter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ascii_converter);
 
-        if (ContextCompat.checkSelfPermission(AsciiConverter.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(AsciiConverter.this, new String[] {Manifest.permission.CAMERA}, ACCESS_CAMERA);
+        if (ContextCompat.checkSelfPermission(AsciiConverterActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AsciiConverterActivity.this, new String[] {Manifest.permission.CAMERA}, ACCESS_CAMERA);
         }
 
         asciiTextView = (TextView) findViewById(R.id.asciiTextView);
@@ -98,7 +98,7 @@ public class AsciiConverter extends AppCompatActivity {
                 ClipData clipData = ClipData.newPlainText("ASCII Art", asciiTextView.getText().toString());
                 clipboardManager.setPrimaryClip(clipData);
 
-                Toast.makeText(AsciiConverter.this, "ASCII Art copied!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AsciiConverterActivity.this, "ASCII Art copied!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -289,9 +289,9 @@ public class AsciiConverter extends AppCompatActivity {
         asciiTextView.setTextColor(Color.BLACK);
 
         if (style == 3 || style == 4) {
-            asciiTextView.setTypeface(asciiTextView.getTypeface(), Typeface.BOLD);
+            asciiTextView.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
         } else {
-            asciiTextView.setTypeface(asciiTextView.getTypeface(), Typeface.NORMAL);
+            asciiTextView.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
         }
 
         return ASCII.toString();

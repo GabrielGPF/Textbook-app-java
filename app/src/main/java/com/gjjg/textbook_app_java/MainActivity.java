@@ -23,7 +23,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gerarAsciiArtButtonClick(View view) {
-        Intent intent = new Intent(this, AsciiConverter.class);
+        Intent intent = new Intent(this, AsciiConverterActivity.class);
+        startActivity(intent);
+    }
+
+    public void feedClick(View view) {
+        Intent intent = new Intent(this, MainFeedActivity.class);
+        startActivity(intent);
+    }
+
+    public void simpleFeedClick(View view) {
+        Intent intent = new Intent(this, SimpleFeedActivity.class);
+        startActivity(intent);
+    }
+
+    public void profileClick(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 }

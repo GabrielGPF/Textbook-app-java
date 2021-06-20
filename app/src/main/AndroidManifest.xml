@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gjjg.textbook_app_java">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Textbookappjava">
-        <activity android:name=".AsciiConverter"></activity>
-        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".SimpleFeedActivity" />
+        <activity android:name=".MainFeedActivity" />
+        <activity android:name=".AsciiConverterActivity" />
+        <activity android:name=".SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
