@@ -30,6 +30,12 @@ public class SignInActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(myIntent, 0);
+        return true;
+    }
+
     public void signinButtonClick(View view) {
         EditText emailEditText = (EditText)findViewById(R.id.editTextTextEmailAddress0);
         EditText passwordEditText = (EditText)findViewById(R.id.editTextTextPassword0);
@@ -41,14 +47,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void signupButtonClick(View view) {
-//        Intent intent = new Intent(this, SignInActivity.class);
-//        startActivity(intent);
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
     private void login(String email, String password){
