@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Textbookappjava">
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".SimpleFeedActivity" />
+        <activity android:name=".MainFeedActivity" />
+        <activity android:name=".AsciiConverterActivity" />
         <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".AsciiConverter" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
