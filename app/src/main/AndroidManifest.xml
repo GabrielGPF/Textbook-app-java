@@ -16,6 +16,7 @@
         <activity android:name=".SimpleFeedActivity" />
         <activity android:name=".MainFeedActivity" />
         <activity android:name=".AsciiConverterActivity" />
+        <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
