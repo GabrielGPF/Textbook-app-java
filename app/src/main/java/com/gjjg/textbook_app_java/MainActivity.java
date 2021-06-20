@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signinButtonClick(View view) {
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
     }
 
     public void signupButtonClick(View view) {
