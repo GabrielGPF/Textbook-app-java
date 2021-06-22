@@ -28,7 +28,25 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AsciiConverterActivity extends AppCompatActivity {
 
@@ -46,6 +64,8 @@ public class AsciiConverterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ascii_converter);
+        setTitle("Generate ascii");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (ContextCompat.checkSelfPermission(AsciiConverterActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(AsciiConverterActivity.this, new String[] {Manifest.permission.CAMERA}, ACCESS_CAMERA);
@@ -101,6 +121,18 @@ public class AsciiConverterActivity extends AppCompatActivity {
                 Toast.makeText(AsciiConverterActivity.this, "ASCII Art copied!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewPost(asciiTextView.getText().toString());
+            }
+        });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 
     @Override
@@ -295,5 +327,64 @@ public class AsciiConverterActivity extends AppCompatActivity {
         }
 
         return ASCII.toString();
+    }
+
+    private void addNewPost(String newPost){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String myId = FirebaseAuth.getInstance().getUid();
+        if(myId == null){
+            return;
+        }
+
+        Timestamp timestamp = Timestamp.now();
+
+        Map<String, Object> newPostObject = new HashMap<>();
+        newPostObject.put("image", newPost);
+        newPostObject.put("timestamp", timestamp);
+        DocumentReference userRef = db.collection("users").document(myId);
+        newPostObject.put("sender", userRef);
+
+        db.collection("posts")
+                .add(newPostObject)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(AsciiConverterActivity.this, "New post successfully added.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AsciiConverterActivity.this, "Problem while posting.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Map<String, Object> myAccount = new HashMap<>();
+
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getId().equals(myId)){
+                                    myAccount = document.getData();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(AsciiConverterActivity.this, "Error getting documents.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        ArrayList<String> lastImages = (ArrayList<String>) myAccount.get("images");
+                        lastImages.add(newPost);
+                        myAccount.put("images", lastImages);
+
+                        db.collection("users").document(myId).set(myAccount, SetOptions.merge());
+                        finish();
+                    }
+                });
     }
 }

@@ -3,6 +3,7 @@ package com.gjjg.textbook_app_java;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,15 +26,12 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         setTitle("Textbook - Sign in");
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mAuth = FirebaseAuth.getInstance();
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
+        if(mAuth.getCurrentUser() != null){
+            Intent myIntent = new Intent(getApplicationContext(), MainFeedActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(myIntent);
+        }
     }
 
     public void signinButtonClick(View view) {
@@ -69,30 +67,30 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         if (!emailFilled && !passwordFilled){
-            Toast.makeText(this, "Preencha os campos.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Fill all fields.", Toast.LENGTH_LONG).show();
         } else if (!emailFilled){
-            Toast.makeText(this, "Preencha o campo email.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Fill email field.",Toast.LENGTH_LONG).show();
         } else if (!passwordFilled){
-            Toast.makeText(this, "Preencha o campo senha.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Fill password field.",Toast.LENGTH_LONG).show();
         } else if (!emailValid){
-            Toast.makeText(this, "Insira um email válido.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Insert a valid email.",Toast.LENGTH_LONG).show();
         } else {
-            firebaseSignin(email, password);
+            firebaseSignin(email, password, this);
         }
     }
 
-    private void firebaseSignin(String email, String password){
+    private void firebaseSignin(String email, String password, Context context){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(SignInActivity.this, "Logado com sucesso.", Toast.LENGTH_SHORT).show();
-//                            Intent intent = new Intent(SignInActivity.this, ListActivity.class);
-//                            startActivity(intent);
+                            Toast.makeText(SignInActivity.this, "Sign in succeeded.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, MainFeedActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         } else {
-                            Toast.makeText(SignInActivity.this, "Problema de autenticação.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, "Authentication error.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -18,17 +20,22 @@ public class SimpleFeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_feed);
 
-        // Tem que mudar para passar a arte
-        testData.add("ugauga");
-        testData.add("wlkamdwa");
-        testData.add("binga balong");
-        testData.add("roberto boetoeor");
-        testData.add("penis pinto boquete");
-        testData.add("pepepepep");
+        setTitle(FirebaseUtil.getInstance().getCurrentUserUsername() + " - feed");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Intent intent = getIntent();
 
         simpleFeedRecyclerView = findViewById(R.id.simpleFeedRecyclerView);
         simpleFeedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SimpleFeedViewAdapter simpleFeedViewAdapter = new SimpleFeedViewAdapter(this, testData);
+        SimpleFeedViewAdapter simpleFeedViewAdapter = new SimpleFeedViewAdapter(this, FirebaseUtil.getInstance().getCurrentUserImages());
         simpleFeedRecyclerView.setAdapter(simpleFeedViewAdapter);
+        simpleFeedRecyclerView.smoothScrollToPosition(intent.getIntExtra("index", 0));
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+//        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+//        startActivityForResult(myIntent, 0);
+        return true;
     }
 }

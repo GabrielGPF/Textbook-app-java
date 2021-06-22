@@ -33,6 +33,10 @@ public class SimpleFeedViewAdapter extends RecyclerView.Adapter<SimpleFeedViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (data.size() > 0) {
+            holder.simpleFeedAsciiTextView.setText(data.get(position));
+        }
+
         holder.simpleFeedAsciiTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

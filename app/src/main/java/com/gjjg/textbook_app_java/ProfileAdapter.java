@@ -1,6 +1,7 @@
 package com.gjjg.textbook_app_java;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (data.size() > 0) {
+            holder.profileAsciiTextView.setText(data.get(position));
+        }
 
+        holder.profileAsciiTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SimpleFeedActivity.class);
+                intent.putExtra("index", position);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

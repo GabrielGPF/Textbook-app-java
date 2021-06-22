@@ -3,6 +3,7 @@ package com.gjjg.textbook_app_java;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gjjg.textbook_app_java.models.Post;
+
 import java.util.ArrayList;
 
 public class MainFeedViewAdapter extends RecyclerView.Adapter<MainFeedViewAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<String> data;
+    private ArrayList<Post> data;
 
-    public MainFeedViewAdapter(Context context, ArrayList<String> data) {
+    public MainFeedViewAdapter(Context context, ArrayList<Post> data) {
         this.context = context;
         this.data = data;
     }
@@ -36,8 +39,18 @@ public class MainFeedViewAdapter extends RecyclerView.Adapter<MainFeedViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (data.size() > 0) {
-            holder.feedProfileTextView.setText(data.get(position));
+            holder.feedProfileTextView.setText(data.get(position).getSenderName());
+            holder.feedAsciiTextView.setText(data.get(position).getImage());
         }
+
+        holder.feedProfileTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUtil.getInstance().setCurrentUser(data.get(position).getSenderId());
+                Intent myIntent = new Intent(context, ProfileActivity.class);
+                context.startActivity(myIntent);
+            }
+        });
 
         holder.feedCopyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,14 +71,12 @@ public class MainFeedViewAdapter extends RecyclerView.Adapter<MainFeedViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView feedAsciiTextView;
-        ImageView feedProfileImageView;
         TextView feedProfileTextView;
         ImageButton feedCopyButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             feedAsciiTextView = itemView.findViewById(R.id.feedAsciiTextView);
-            feedProfileImageView = itemView.findViewById(R.id.feedProfileImageView);
             feedProfileTextView = itemView.findViewById(R.id.feedProfileTextView);
             feedCopyButton = itemView.findViewById(R.id.feedCopyButton);
         }

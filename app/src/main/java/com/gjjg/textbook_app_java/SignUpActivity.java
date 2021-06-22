@@ -39,8 +39,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
+        Intent myIntent = new Intent(getApplicationContext(), SignInActivity.class);
+        startActivity(myIntent);
         return true;
     }
 
@@ -91,11 +91,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (!usernameFilled || !emailFilled || !passwordFilled || !confirmPasswordFilled){
-            Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Fill all fields.", Toast.LENGTH_LONG).show();
         } else if (!emailValid){
-            Toast.makeText(this, "Insira um email válido.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Insert a valid email.",Toast.LENGTH_LONG).show();
         } else if (!confirmPasswordValid){
-            Toast.makeText(this, "Senhas não condizem.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Passwords are not matching.",Toast.LENGTH_LONG).show();
         } else {
             getValidUsername(username, email, password);
         }
@@ -108,11 +108,11 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(SignUpActivity.this, "Conta criada com sucesso.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Account creation succeeded.", Toast.LENGTH_SHORT).show();
                             createNewUserDatabase(username, user.getUid());
                             finish();
                         } else {
-                            Toast.makeText(SignUpActivity.this, "Conta já existente.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Existing account.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
